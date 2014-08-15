@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/public/stylesheets/custom_styles.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	io = io.connect();
+
+	$(document).ready(function() {
+		io.emit('show_me_polls');
+		
+		io.on('existing_polls', function(polls) {
+			var html = '';
+			for (var i = 0; i < polls.indexes.length; i++) {
+				if(polls.allPolls[0] == undefined) {
+					html = '<p>There are no polls currently, be the first to create one!</p>';
+					$('#pollsWrapper').html(html);
+				} else {
+					html+="<p>"+polls.allPolls[polls.indexes[i]].author+": <a href='/polls/"+polls.indexes[i]+"'>"+polls.allPolls[polls.indexes[i]].question+"</a></p>";
+				}
+			};
+			$('#pollsWrapper').html(html);
+		})
+
+		io.on('update_polls', function(poll) {
+			html="<p>"+poll.newPollInfo.author+": <a href='/polls/"+poll.newPollInfo.Id+"'>"+poll.newPollInfo.question+"</a></p>";
+			$('#pollsWrapper').append(html)
+		})
+	})
+
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4 pull-right">
+				<a href="/poll/create">Create a New Poll</a>
+				<a href="/logout">Logout</a>
+			</div>
+		</div>
+		<div class="row">
+			<h1>Hello <%= user.name %>!</h1>
+		</div>
+		<div class="row">
+			<h1>Current Polls:</h1>
+		</div>
+		<div id="pollsWrapper" class="row"></div>
+	</div>
+
+</body>
+</html>

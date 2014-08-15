@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/public/stylesheets/custom_styles.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	io = io.connect();
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4 pull-right">
+				<a href="/polls">Cancel</a>
+			</div>
+		</div>
+		<div class="row">
+			<h1>Put the question and options here:</h1>
+		</div>
+		<div class="row">
+			<form action="/process" method="post">
+			Question: <input type="text" name="question" required>
+		</div>
+		<div class="row">
+			Option 1: <input type="text" name="opt1" required>
+		</div>
+		<div class="row">
+			Option 2: <input type="text" name="opt2" required>
+		</div>
+		<div class="row">
+			Option 3: <input type="text" name="opt3" required>
+		</div>
+		<div class="row">
+			Option 4: <input type="text" name="opt4" required>
+		</div>
+		<div class="row">
+			<input type="submit" value="Create Poll">
+			</form>
+		</div>
+	</div>
+</body>
+</html>

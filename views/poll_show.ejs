@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/public/stylesheets/custom_styles.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	io = io.connect();
+	var currPollId;
+	$(document).ready(function() {
+		io.emit('request_pollId');
+		$('button').click(function(){
+			var choice = $(this).attr('id');
+			var pollId = $(this).attr('class');
+			io.emit('place_vote', { option: choice, pollId: pollId })
+		})
+		io.on('update_votes', function(data) {
+			var self = document.getElementById(data.option);
+			$(self).parent().parent().find('.option').html(data.points);
+		})
+	})
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4 pull-right">
+				<a href="/polls">Go to Polls</a>
+			</div>
+		</div>
+		<div class="row">
+			<h1><%= poll.question %> <small>by <%= poll.author %></small></h1>
+			<p>click the vote button to choose one:</p>
+		</div>
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Option</th>
+					<th>Current Count of Votes</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><%= poll.option1 %></td>
+					<td class="option"><%= poll.results.opt1 %></td>
+					<td>
+						<button id='opt1' class="<%= pollId %>">Vote</button>
+					</td>
+				</tr>
+				<tr>
+					<td><%= poll.option2 %></td>
+					<td class="option"><%= poll.results.opt2 %></td>
+					<td>
+						<button id='opt2' class="<%= pollId %>">Vote</button>
+					</td>
+				</tr>
+				<tr>
+					<td><%= poll.option3 %></td>
+					<td class="option"><%= poll.results.opt3 %></td>
+					<td>
+						<button id='opt3' class="<%= pollId %>">Vote</button>
+					</td>
+				</tr>
+				<tr>
+					<td><%= poll.option4 %></td>
+					<td class="option"><%= poll.results.opt4 %></td>
+					<td>
+						<button id='opt4' class="<%= pollId %>">Vote</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
